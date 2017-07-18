@@ -374,9 +374,10 @@
         today = mm + '/' + dd + '/' + yyyy;
         
         var todayTest=today+1;
-    $.get("https://rallywdc.herokuapp.com/sendData", function(resp) {
-        
+    $.get("https://rallywdc.herokuapp.com/sendData",function() {
+        tableau.log("first get fired");
         $.getJSON("https://rallywdc.herokuapp.com/sendData", function(resp) {
+            tableau.log("Get JSON");
         var feat = resp,
             tableData = []
             i=0;
