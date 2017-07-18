@@ -374,7 +374,7 @@
         today = mm + '/' + dd + '/' + yyyy;
         
         var todayTest=today+1;
-    $.getJSON("http://localhost:3000/sendData", function(resp) {
+    $.getJSON("https://rallywdc.herokuapp.com/sendData", function(resp) {
         var feat = resp,
             tableData = []
             i=0;
