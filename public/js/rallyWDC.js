@@ -374,7 +374,7 @@
         today = mm + '/' + dd + '/' + yyyy;
         
         var todayTest=today+1;
-    $.getJSON("https://rallywdc.herokuapp.com/sendData", function(resp) {
+    $.get("https://rallywdc.herokuapp.com/sendData", function(resp) {
         
         $.getJSON("https://rallywdc.herokuapp.com/sendData", function(resp) {
         var feat = resp,
