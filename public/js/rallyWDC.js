@@ -375,6 +375,8 @@
         
         var todayTest=today+1;
     $.getJSON("https://rallywdc.herokuapp.com/sendData", function(resp) {
+        
+        $.getJSON("https://rallywdc.herokuapp.com/sendData", function(resp) {
         var feat = resp,
             tableData = []
             i=0;
@@ -733,6 +735,7 @@
          
         table.appendRows(tableData);
         doneCallback();
+        });
     });
 };
     console.log("Got Data");
