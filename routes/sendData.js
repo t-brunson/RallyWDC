@@ -11,11 +11,11 @@ var ssn;
 router.get('/',function(req,res){
     ssn = req.session; 
     res.json({userStory: ssn.hierarchicalrequirementJSON, iteration: ssn.IterationJSON, project: ssn.projectJSON, release: ssn.releaseJSON, defect: ssn.defectJSON, task: ssn.taskJSON, portfolioItem: ssn.portfolioItemJSON});
-    console.log("Tabelau Requesting Data Request");
+    console.log("Sending JSON Data to /sendData");
 })
 router.post('/', function(req, res,next) {
-    console.log("");
-   res.sendFile('index.html',{root: './public'})
+    console.log("Tableau Web connector displayed");
+   res.sendFile('tableau.html',{root: './views'})
 });
 
 module.exports = router;

@@ -8,6 +8,11 @@ var login_controller = require('../controllers/login');
 //Defining session variable 
 var ssn;
 
+router.get('/', function(req, res) {
+console.log("/ Get fired");
+  res.sendFile('login.html',{root: './views'});   
+    
+});
 //Login User
 router.post('/',function(req, res,next){ 
     //Define the Session

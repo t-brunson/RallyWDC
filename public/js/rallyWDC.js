@@ -1,8 +1,37 @@
 (function() {
+    console.log("Rally WDC Has Started");
     // Create tableau connector
-  var myConnector = tableau.makeConnector();
+    var myConnector = tableau.makeConnector();
+    console.log("After Rally WDC Connector object has been made");
+    
     //Define the tables the be created
-   myConnector.getSchema = function (schemaCallback) {     
+    myConnector.init = function(initCallback){
+       initCallback();
+        if(tableau.phase == tableau.phaseEnum.interactivePhase ) {
+                console.log("Interactive Phase");
+                tableau.log("Interactive Phase");
+          };
+        
+        if(tableau.phase == tableau.phaseEnum.authPhase ) {
+            console.log("Auth Phase");
+            tableau.log("Auth Phase");
+            $.get("http://localhost:3000/sendData",function(){
+              console.log("Inside the Connector Init Phase Get Request to send data");
+              tableau.log("Inside Connector Init Phase Get Request to send data"); 
+                
+            });
+        }
+        
+        console.log("End the Connector Init Phase Get Request to send data");
+        tableau.log("End Connector Init Phase Get Request to send data");
+       }
+
+    
+    
+    
+    myConnector.getSchema = function (schemaCallback) {   
+        console.log("Inside Get Schema Function Started");
+        tableau.log("Inside Get Schema Function Started");
     //defining schemas to place data     
     var userStory_cols = [
         
@@ -352,9 +381,11 @@
 
   schemaCallback([userStoryTabel, iterationTable, projectTable, releaseTable,defectTabel,taskTabel,portfolioItemTabel]);
 };
-    console.log("Got Schema");
+    console.log("After Got Schema Function has been Fired");
     //Pulling Data From Rally
     myConnector.getData = function(table, doneCallback) {
+        console.log("Inside Get Data Function Called");
+        tableau.log("Inside Get Data Function Called");
         //Setting Date
         var today = new Date();
         var dd = today.getDay();
@@ -374,14 +405,15 @@
         today = mm + '/' + dd + '/' + yyyy;
         
         var todayTest=today+1;
-    $.get("https://rallywdc.herokuapp.com/sendData",function() {
-        tableau.log("first get fired");
-        $.getJSON("https://rallywdc.herokuapp.com/sendData", function(resp) {
-            tableau.log("Get JSON");
-        var feat = resp,
+  
+    $.getJSON("http://localhost:3000/sendData", function(resp) {
+            console.log("Inside Get JSON Data JQuery Fired");
+            tableau.log("Inside Get JSON Data JQuery Fired");
+            var feat = resp,
+             
             tableData = []
             i=0;
-        
+        console.log(feat.userStory.Results);
           if (table.tableInfo.id == "UserStory"){
                 for (var i = 0, len = feat.userStory.Results.length; i < len; i++) {
                     
@@ -457,7 +489,6 @@
                 }
                                                             }   
                                                }
-          
           // Iteration Call  
           if (table.tableInfo.id == "Iteration"){
                 for (var i = 0, len = feat.iteration.Results.length; i < len; i++) {
@@ -572,7 +603,7 @@
                                 });
                 }                                        
             //Error Handling  
-            for (var i = 0, len = feat.defect.Resultslength; i < len; i++){
+            for (var i = 0, len = feat.defect.Results.length; i < len; i++){
                         
             if(tableData[i].IterationID !== null)
                 {
@@ -708,9 +739,9 @@
                     "ReleaseID": feat.portfolioItem.Results[i].Release,
                     "RunDate": today,
                     //"RunProject":'',
-                              });
+                              }); 
                                                                 }                                               
-            for (var i = 0, len = feat.portfolioItem.Resultslength; i < len; i++){
+            for (var i = 0, len = feat.portfolioItem.Results.length; i < len; i++){
                         
             if(tableData[i].ProjectName !== null)
                 {
@@ -720,9 +751,9 @@
                 }
             if(tableData[i].Release !== null)
                 {
-                    tableData[i].Release=  feat.portfolioItem.Results[i].Release.Name;
+                    //tableData[i].Release=  feat.portfolioItem.Results[i].Release.Name;
                                     
-                    tableData[i].ReleaseID= feat.portfolioItem.Results[i].Release.ObjectID;
+                    //tableData[i].ReleaseID= feat.portfolioItem.Results[i].Release.ObjectID;
                 }
             if(tableData[i].ParentName !== null)
                 {
@@ -737,17 +768,26 @@
         table.appendRows(tableData);
         doneCallback();
         });
-    });
+    console.log("After Get JSON data has been fired");
+    tableau.log("After Get JSON data has been fired");
 };
-    console.log("Got Data");
+    console.log("After Get Data Function has been Fired");
     // Register the tableau connector, call this last
     tableau.registerConnector(myConnector);
+    console.log("After Connector Registred");
     //Event listner for sumbitting data to tableau
+    tableau.connectionName = "Rally Data";
+    console.log("Before Tableau Submit");
+    
+    
     $(document).ready(function() {
+        console.log("Inside Document Reay Function Started");
       $("#getdatabutton").click(function() {
+          console.log("Get Data buton pressed");
+          tableau.log("Get Data buton pressed");
           tableau.connectionName = "Rally Data";
           tableau.submit();
       });
   });
-  
+  console.log("Rally WDC Has Fired All functions");
 })();

@@ -4,7 +4,9 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res) {
-  res.sendFile('index.html');
+console.log("/ Get fired");
+ res.sendFile('login.html',{root: './views'});
+    
 });
 router.use(express.static( 'public'));
 router.post('/', function (req,res){
