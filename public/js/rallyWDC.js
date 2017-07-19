@@ -2,32 +2,6 @@
     console.log("Rally WDC Has Started");
     // Create tableau connector
     var myConnector = tableau.makeConnector();
-    console.log("After Rally WDC Connector object has been made");
-    
-    //Define the tables the be created
-    myConnector.init = function(initCallback){
-       initCallback();
-        if(tableau.phase == tableau.phaseEnum.interactivePhase ) {
-                console.log("Interactive Phase");
-                tableau.log("Interactive Phase");
-          };
-        
-        if(tableau.phase == tableau.phaseEnum.authPhase ) {
-            console.log("Auth Phase");
-            tableau.log("Auth Phase");
-            $.get("http://localhost:3000/sendData",function(){
-              console.log("Inside the Connector Init Phase Get Request to send data");
-              tableau.log("Inside Connector Init Phase Get Request to send data"); 
-                
-            });
-        }
-        
-        console.log("End the Connector Init Phase Get Request to send data");
-        tableau.log("End Connector Init Phase Get Request to send data");
-       }
-
-    
-    
     
     myConnector.getSchema = function (schemaCallback) {   
         console.log("Inside Get Schema Function Started");
@@ -381,9 +355,8 @@
 
   schemaCallback([userStoryTabel, iterationTable, projectTable, releaseTable,defectTabel,taskTabel,portfolioItemTabel]);
 };
-    console.log("After Got Schema Function has been Fired");
-    //Pulling Data From Rally
-    myConnector.getData = function(table, doneCallback) {
+    
+     myConnector.getData = function(table, doneCallback) {
         console.log("Inside Get Data Function Called");
         tableau.log("Inside Get Data Function Called");
         //Setting Date
@@ -406,14 +379,14 @@
         
         var todayTest=today+1;
   
-    $.getJSON("http://localhost:3000/sendData", function(resp) {
             console.log("Inside Get JSON Data JQuery Fired");
             tableau.log("Inside Get JSON Data JQuery Fired");
-            var feat = resp,
-             
+        
+            var feat =  JSON.parse(tableau.connectionData),
             tableData = []
             i=0;
-        console.log(feat.userStory.Results);
+        
+            console.log(feat.userStory.Results);
           if (table.tableInfo.id == "UserStory"){
                 for (var i = 0, len = feat.userStory.Results.length; i < len; i++) {
                     
@@ -767,27 +740,46 @@
          
         table.appendRows(tableData);
         doneCallback();
-        });
+        
     console.log("After Get JSON data has been fired");
     tableau.log("After Get JSON data has been fired");
 };
+        
+
+   
+    console.log("After Got Schema Function has been Fired");
+    //Pulling Data From Rally
+   
     console.log("After Get Data Function has been Fired");
     // Register the tableau connector, call this last
     tableau.registerConnector(myConnector);
-    console.log("After Connector Registred");
-    //Event listner for sumbitting data to tableau
-    tableau.connectionName = "Rally Data";
-    console.log("Before Tableau Submit");
-    
     
     $(document).ready(function() {
         console.log("Inside Document Reay Function Started");
       $("#getdatabutton").click(function() {
           console.log("Get Data buton pressed");
           tableau.log("Get Data buton pressed");
-          tableau.connectionName = "Rally Data";
-          tableau.submit();
+          if(tableau.phase == tableau.phaseEnum.interactivePhase ) {
+                console.log("Interactive Phase");
+                tableau.log("Interactive Phase");
+            $.getJSON("http://localhost:3000/sendData", function(resp) {
+            console.log("Inside Get JSON Data JQuery Fired");
+            tableau.log("Inside Get JSON Data JQuery Fired");
+            var feat = resp;
+            console.log(feat);
+            tableau.connectionData=JSON.stringify(feat);
+            tableau.connectionName = "Rally Data";
+            tableau.submit();  
+            });  
+      };
+          if(tableau.phase == tableau.phaseEnum.gatherDataPhase) {
+                console.log("gatherDataPhase");
+                tableau.log("gatherDataPhase");
+            
+            tableau.connectionName = "Rally Data";
+            tableau.submit();  
+            };  
       });
   });
-  console.log("Rally WDC Has Fired All functions");
+    console.log("Rally WDC Has Fired All functions");
 })();
