@@ -762,7 +762,7 @@
           if(tableau.phase == tableau.phaseEnum.interactivePhase ) {
                 console.log("Interactive Phase");
                 tableau.log("Interactive Phase");
-            $.getJSON("http://localhost:3000/sendData", function(resp) {
+            $.getJSON("https://rallywdc.herokuapp.com/sendData", function(resp) {
             console.log("Inside Get JSON Data JQuery Fired");
             tableau.log("Inside Get JSON Data JQuery Fired");
             var feat = resp;
