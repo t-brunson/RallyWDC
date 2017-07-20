@@ -766,8 +766,9 @@
             console.log("Inside Get JSON Data JQuery Fired");
             tableau.log("Inside Get JSON Data JQuery Fired");
             var feat = resp;
-            tableau.connectionName = "Rally Data" ;
             tableau.connectionData=JSON.stringify(feat);
+            tableau.connectionName = "Rally Data" ;
+            
             tableau.submit();  
             });  
       };
