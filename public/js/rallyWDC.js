@@ -26,15 +26,13 @@
             initCallback();
             tableau.submit(); 
         }
-        
+         
     }
     myConnector.getSchema = function (schemaCallback) {   
         console.log("Inside Get Schema Function Started");
         tableau.log("Inside Get Schema Function Started");
     //defining schemas to place data     
     var userStory_cols = [
-        
-        //{ id : "ID", alias : "AutoID", dataType : tableau.dataTypeEnum.float },
         
         { id : "FormattedID", alias : "FormattedID", dataType : tableau.dataTypeEnum.string }, 
         
@@ -80,9 +78,21 @@
         
         { id : "DirectChildren", alias : "Children Count", dataType : tableau.dataTypeEnum.string },
         
-        //{ id : "RunProject", alias : "Run Project", dataType : tableau.dataTypeEnum.string },
+        { id : "Name", alias : "Name", dataType : tableau.dataTypeEnum.string },
         
-        { id : "Name", alias : "Name", dataType : tableau.dataTypeEnum.string },   
+        { id : "Description", alias : "Description", dataType : tableau.dataTypeEnum.string },
+        
+        { id : "Ready", alias : "Ready Checkmark", dataType : tableau.dataTypeEnum.string },
+        
+        { id : "AcceptanceCriteria", alias : "Acceptance Criteria", dataType : tableau.dataTypeEnum.string },
+        
+        { id : "Discussion", alias : "Discussion Count", dataType : tableau.dataTypeEnum.float },
+        
+        { id : "Blocked", alias : "Blocked", dataType : tableau.dataTypeEnum.string },
+        
+        { id : "TaskEstimateTotal", alias : "Task Estimate Total", dataType : tableau.dataTypeEnum.float },
+        
+        { id : "TaskRemainingTotal", alias : "Task Remaining Total", dataType : tableau.dataTypeEnum.float },
     ];
         
     var userStoryTabel = {
@@ -410,14 +420,11 @@
             var feat =  JSON.parse(tableau.connectionData),
             tableData = []
             i=0;
-        
-            console.log(feat.userStory.Results);
+         
           if (table.tableInfo.id == "UserStory"){
                 for (var i = 0, len = feat.userStory.Results.length; i < len; i++) {
                     
                     tableData.push({
-                    //"HR_ref": feat[i]._ref.substring(feat[i]._ref.lastIndexOf("/")+1, feat[i]._ref.length ),
-                    //"ID": ,
                     "FormattedID": feat.userStory.Results[i].FormattedID,
                     "PlanEstimate": feat.userStory.Results[i].PlanEstimate,
                     "Rank": feat.userStory.Results[i].Rank,
@@ -440,8 +447,15 @@
                     "RunDate": today,
                     "ObjectID": feat.userStory.Results[i].ObjectID,
                     "DirectChildren": feat.userStory.Results[i].DirectChildrenCount,
-                    //"RunProject": feat.Results[i].DirectChildrenCount,
                     "Name": feat.userStory.Results[i]._refObjectName,
+                    "Description":feat.userStory.Results[i].Description,
+                    "Ready":feat.userStory.Results[i].Ready,
+                    "AcceptanceCriteria":feat.userStory.Results[i].c_AcceptanceCriteria,
+                    "Discussion":feat.userStory.Results[i].Discussion.Count,
+                    "Blocked":feat.userStory.Results[i].Blocked,
+                    "TaskEstimateTotal":feat.userStory.Results[i].TaskEstimateTotal,
+                    "TaskRemainingTotal":feat.userStory.Results[i].TaskRemainingTotal,
+                    
                                 }); 
                     }
                   //Error Handeling  
