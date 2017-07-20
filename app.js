@@ -57,6 +57,7 @@ app.use('/project', project);
 //Sending data for the web data connector
 app.use('/sendData',sendData);
 
+app.use('/sendData/submit',sendData)
 //Error Handling//
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

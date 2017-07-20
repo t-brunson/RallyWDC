@@ -8,7 +8,7 @@
     if(tableau.phase == tableau.phaseEnum.interactivePhase ) {
                 console.log("Interactive Phase");
                 tableau.log("Interactive Phase");
-            $.getJSON("http://localhost:3000/sendData", function(resp) {
+            $.getJSON("http://localhost:3000/sendData/submit", function(resp) {
             console.log("Inside Get JSON Data JQuery Fired");
             tableau.log("Inside Get JSON Data JQuery Fired");
             var feat = resp;
@@ -18,9 +18,15 @@
                 tableau.log(feat);
             tableau.connectionData=JSON.stringify(feat);
             tableau.connectionName= "Rally Data" ;
-            });  
+                initCallback();
+            }); 
+        
       }
-        initCallback();
+        if(tableau.phase == tableau.phaseEnum.gatherDataPhase ) {
+            initCallback();
+            tableau.submit(); 
+        }
+        
     }
     myConnector.getSchema = function (schemaCallback) {   
         console.log("Inside Get Schema Function Started");

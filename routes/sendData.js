@@ -8,14 +8,16 @@ var ssn;
 
 
 /* GET home page. */
-router.get('/',function(req,res){
+router.get('/submit',function(req,res){
     ssn = req.session; 
-    res.json({userStory: ssn.hierarchicalrequirementJSON, iteration: ssn.IterationJSON, project: ssn.projectJSON, release: ssn.releaseJSON, defect: ssn.defectJSON, task: ssn.taskJSON, portfolioItem: ssn.portfolioItemJSON});
-    console.log("Sending JSON Data to /sendData");
+
+         res.json({userStory: ssn.hierarchicalrequirementJSON, iteration: ssn.IterationJSON, project: ssn.projectJSON, release: ssn.releaseJSON, defect: ssn.defectJSON, task: ssn.taskJSON, portfolioItem: ssn.portfolioItemJSON});
+        console.log("/sendData Get Request sent data");
+    
 })
 router.post('/', function(req, res,next) {
-    console.log("Tableau Web connector displayed");
-   res.sendFile('tableau.html',{root: './views'})
+    console.log("Data was sent to tableau");
+   
 });
 
 module.exports = router;

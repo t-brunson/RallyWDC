@@ -6,6 +6,12 @@ var session = require('express-session');
 var project = require('../controllers/project');
 var ssn;
 
+
+router.get('/',function(req,res){
+    ssn = req.session; 
+    res.sendFile('index.html',{root: './public'});
+   
+    });
 //Get the project the user selected
 router.post('/',function(req,res,next){ 
     ssn = req.session;
