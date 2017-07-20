@@ -3,6 +3,25 @@
     // Create tableau connector
     var myConnector = tableau.makeConnector();
     
+    myConnector.init =function(initCallback){
+        console.log("Right check phase");
+    if(tableau.phase == tableau.phaseEnum.interactivePhase ) {
+                console.log("Interactive Phase");
+                tableau.log("Interactive Phase");
+            $.getJSON("http://localhost:3000/sendData", function(resp) {
+            console.log("Inside Get JSON Data JQuery Fired");
+            tableau.log("Inside Get JSON Data JQuery Fired");
+            var feat = resp;
+                console.log("feat set");
+                tableau.log("feat set");
+                console.log(feat);
+                tableau.log(feat);
+            tableau.connectionData=JSON.stringify(feat);
+            tableau.connectionName= "Rally Data" ;
+            });  
+      }
+        initCallback();
+    }
     myConnector.getSchema = function (schemaCallback) {   
         console.log("Inside Get Schema Function Started");
         tableau.log("Inside Get Schema Function Started");
@@ -381,7 +400,7 @@
   
             console.log("Inside Get JSON Data JQuery Fired");
             tableau.log("Inside Get JSON Data JQuery Fired");
-        
+            console.log(tableau.connectionData);
             var feat =  JSON.parse(tableau.connectionData),
             tableData = []
             i=0;
@@ -744,42 +763,24 @@
     console.log("After Get JSON data has been fired");
     tableau.log("After Get JSON data has been fired");
 };
-        
 
-   
     console.log("After Got Schema Function has been Fired");
     //Pulling Data From Rally
    
     console.log("After Get Data Function has been Fired");
     // Register the tableau connector, call this last
     tableau.registerConnector(myConnector);
+        
     
     $(document).ready(function() {
         console.log("Inside Document Reay Function Started");
       $("#getdatabutton").click(function() {
-          console.log("Get Data buton pressed");
-          tableau.log("Get Data buton pressed");
-          if(tableau.phase == tableau.phaseEnum.interactivePhase ) {
-                console.log("Interactive Phase");
-                tableau.log("Interactive Phase");
-            $.getJSON("https://rallywdc.herokuapp.com/sendData", function(resp) {
-            console.log("Inside Get JSON Data JQuery Fired");
-            tableau.log("Inside Get JSON Data JQuery Fired");
-            var feat = resp;
-            tableau.connectionData=JSON.stringify(feat);
-            tableau.connectionName= "Rally Data" ;
+            console.log("Get Data Button Pressed");
+            tableau.log("Get Data Button Pressed");
             console.log("Right Before Sumbit");
             tableau.log("Right Before Sumbit");
             tableau.submit();  
-            });  
-      };
-          if(tableau.phase == tableau.phaseEnum.gatherDataPhase) {
-                console.log("gatherDataPhase");
-                tableau.log("gatherDataPhase");
-            
            
-            tableau.submit();  
-            };  
       });
   });
     console.log("Rally WDC Has Fired All functions");
