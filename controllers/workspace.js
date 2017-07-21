@@ -3,6 +3,7 @@ var bodyParser= require('body-parser');
 var urlencodedParser = bodyParser.urlencoded({extended: false});
 //Loging into rally
 var rally = require('rally');
+var queryUtils = rally.util.query;
 //Creating the methods object to export to routes
 var methods = {};
 //Defining a session 
@@ -47,7 +48,7 @@ methods.getWorkspaceID = function(req,workspaceJSON){
                    //Workspace ID 
                     console.log(item._ref.substring(item._ref.lastIndexOf("/")+1, item._ref.length));
                     var workspaceID= item._ref.substring(item._ref.lastIndexOf("/")+1, item._ref.length);
-                     ssn.workspaceID=workspaceID;
+                    ssn.workspaceID=workspaceID;
             }   
             })
         };
@@ -56,11 +57,18 @@ methods.getProjects = function(req,res,rally,workspaceID){
         ssn = req.session;    
         console.log("Project Query Started");
     //Project Query
-        rally.query({type: 'Project', scope: {workspace: '/workspace/'+ workspaceID}},function(error, result){
+            rally.query({
+                type: 'Project', 
+                //query: queryUtils.where('Children', '!=', ''),
+                scope: {
+                    workspace: '/workspace/'+ workspaceID,
+                    up:'true',
+                    down:'false'
+                }},function(error, result){
         //Test for error
         if(error) {
-        console.log("there was an error");
-        }
+            console.log("there was an error");}
+        
         //Save workspace JSON data
         projectsJSON= result;
         //Set project object for other middleware

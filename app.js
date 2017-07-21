@@ -12,7 +12,7 @@ var rally = require('rally');
 //Creating sessions to pass variables across routes
 var session = require('express-session');
 
-//Creating paths for the routes
+//Creating paths for routing
 var index = require('./routes/index');
 var login = require('./routes/login');
 var workspace = require('./routes/workspace');
@@ -21,17 +21,19 @@ var sendData = require('./routes/sendData');
 
 //Creat an instance
 var app = express();
+//Manage CORS Requests
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
-// Creating path for views
+
+// Setting path for views
 app.set('views', path.join(__dirname, 'views'));
 //Allowing dynamic html pages
 app.set('view engine', 'ejs');
 
-//Create a session for that instance
+//Create a session for this instance
 app.use(session({
   cookieName: 'session',
   secret: 'secret',
@@ -39,16 +41,19 @@ app.use(session({
   activeDuration: 5 * 60 * 1000,
 }));
 
+//Logging for errors
 app.use(logger('dev'));
+
+//Handingling data from POST request
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 //Set satic file path
 app.use(express.static(path.join(__dirname, 'public')));
 
-//Displays the login page
+//Displays the login page when site is requested
 app.use('/', index);
-//Logging in 
+//Logging the user in
 app.use('/login', login);
 //Finding the users workspaces
 app.use('/workspace', workspace);
@@ -56,8 +61,9 @@ app.use('/workspace', workspace);
 app.use('/project', project);
 //Sending data for the web data connector
 app.use('/sendData',sendData);
+//Sending data for the web data connector
+app.use('/sendData/submit',sendData);
 
-app.use('/sendData/submit',sendData)
 //Error Handling//
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

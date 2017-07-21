@@ -53,6 +53,9 @@ methods.getData = function(req,res,rallyApi,workspaceID, projectID){
         //User Story Query
         var hierarchicalrequirementJSON;
 rallyApi.query({type: 'hierarchicalrequirement',
+                start: 1, //the 1-based start index, defaults to 1
+                pageSize: 200, //the page size (1-200, defaults to 200)
+                limit: Infinity,
         fetch: [//User Story Fields'
             'FormattedID','PlanEstimate','Rank','ScheduleState','Tags','Type','WorkState','AcceptedDate','IsTestable','Capability','RundDate','ObjectID','DirectChildrenCount','Name','Iteration','Parent','Owner','Release','c_type','Feature',
                 ],
@@ -67,7 +70,10 @@ rallyApi.query({type: 'hierarchicalrequirement',
         console.log('Start iteration Query');
         //Iteration Query
         var IterationJSON;
-        rallyApi.query({type: 'Iteration', 
+        rallyApi.query({type: 'Iteration',
+        start: 1, //the 1-based start index, defaults to 1
+        pageSize: 200, //the page size (1-200, defaults to 200)
+        limit: Infinity,
         fetch:['Iteration','StartDate','EndDate','PlannedVelocity','State','TaskActualTotal','TaskEstimateTotal','TaskRemainingTotal','Sequence','PlanEstimate','ObjectID','Name','Project',],
         scope: {workspace: '/workspace/'+ workspaceID, project: '/project/'+projectID}},function(error, result){if(error) {
         console.log("there was an error");
@@ -82,7 +88,10 @@ rallyApi.query({type: 'hierarchicalrequirement',
         console.log('Start Project Query');
         //Project Query
         var projectJSON;
-        rallyApi.query({type: 'Project', 
+        rallyApi.query({type: 'Project',
+        start: 1, //the 1-based start index, defaults to 1
+        pageSize: 200, //the page size (1-200, defaults to 200)
+        limit: Infinity,                
         fetch: [//Project Fields'
                 'ObjectID' ,'Name','Parent','Workspace',
             ],
@@ -98,6 +107,9 @@ rallyApi.query({type: 'hierarchicalrequirement',
         //Release Query
         var releaseJSON;
         rallyApi.query({type: 'Release', 
+        start: 1, //the 1-based start index, defaults to 1
+        pageSize: 200, //the page size (1-200, defaults to 200)
+        limit: Infinity,
         fetch: [//Release Fields'
     'PlanEstimate','Rank','ScheduleState','ObjectID','Name','Accepted','Project','ReleaseStartDate','ReleaseDate','PlannedVelocity','State','TaskActualTotal','TaskEstimateTotal','TaskRemainingTotal',
             
@@ -113,7 +125,10 @@ rallyApi.query({type: 'hierarchicalrequirement',
         console.log('Start Defect Query');
         //Defect Query
         var defectJSON;
-        rallyApi.query({type: 'Defect', 
+        rallyApi.query({type: 'Defect',
+        start: 1, //the 1-based start index, defaults to 1
+        pageSize: 200, //the page size (1-200, defaults to 200)
+        limit: Infinity,
         fetch: [//User Story Fields'
     'FormattedID','PlanEstimate','ScheduleState','Tags','AcceptedDate','RundDate','ObjectID','Name','Iteration','State','Defects','SchedulableArtifact','ClosedDate','CreationDate','Environment','Priority','FoundBy','Tags','Requirement','Severity','Project','Release','Owner','Rank',
 
@@ -130,6 +145,9 @@ rallyApi.query({type: 'hierarchicalrequirement',
         //Task Query
         var taskJSON;
         rallyApi.query({type: 'Task', 
+        //start: 1, //the 1-based start index, defaults to 1
+        //pageSize: 200, //the page size (1-200, defaults to 200)
+        //limit: Infinity,
         fetch: [//Task Fields*
             'Release','Project','State','Tags','Iteration','Tasks','Actuals','Estimate','ToDo','TimeSpent','TaskType','Owner','WorkProduct','LastUpdateDate','CreationDate','FormattedID','Name','ObjectID','c_Type',
             
@@ -145,7 +163,10 @@ rallyApi.query({type: 'hierarchicalrequirement',
         console.log('Start Portfolio Item Query');
         //Portfolio Item Query
         var portfolioItemJSON;
-        rallyApi.query({type: 'PortfolioItem', 
+        rallyApi.query({type: 'PortfolioItem',
+        //start: 1, //the 1-based start index, defaults to 1
+        //pageSize: 200, //the page size (1-200, defaults to 200)
+        //limit: Infinity,
         fetch: [//PortfolioItem
            'Release','Tags','State','Parent','Project','ObjectID','FormattedID','Feature','PortfolioItemName','AcceptedLeafStoryCount','AcceptedLeafStoryPlaneEstimateTotal','ActualEndDate','ActualStartDate','InvestmentCategory','JobSize','LeafStoryCount','LeafStoryPlanestimateTotal','PercentDoneByStoryCount','PercentDoneByStoryPlanEstimate','PlannedEndDate','PlannedStartDate','PortfolioItemType','PreliminaryEstimate','UnEstimatedLeafStoryCount','RefinedEstimate','Description','EPMSid','PortfolioItemTypeName','Name',
     ],
