@@ -57,7 +57,7 @@ rallyApi.query({type: 'hierarchicalrequirement',
                 pageSize: 200, //the page size (1-200, defaults to 200)
                 limit: Infinity,
         fetch: [//User Story Fields'
-            'FormattedID','PlanEstimate','Rank','ScheduleState','Tags','Type','WorkState','AcceptedDate','IsTestable','Capability','RundDate','ObjectID','DirectChildrenCount','Name','Iteration','Parent','Owner','Release','c_type','Feature',
+            'FormattedID','PlanEstimate','Rank','ScheduleState','Tags','Type','WorkState','AcceptedDate','IsTestable','Capability','RundDate','ObjectID','DirectChildrenCount','Name','Iteration','Parent','Owner','Release','c_type','Feature','c_AcceptanceCriteria','Description','Ready','c_OriginalRank','Discussion','Blocked','TaskEstimateTotal','TaskRemainingTotal',
                 ],
         scope: {workspace: '/workspace/'+ workspaceID, project: '/project/'+projectID}}, 
     function(error, result) {if(error) {console.log(error);} 
@@ -179,6 +179,7 @@ rallyApi.query({type: 'hierarchicalrequirement',
         ssn.portfolioItemJSON= portfolioItemJSON;
         console.log('Portfolio Item Query Completed');
         res.render("sendData", {Project: ssn.projectsJSON, ProjectID: ssn.projectID,Workspace: ssn.workspacesJSON, WorkspaceID: ssn.workspaceID});
+        //res.json({userStory: ssn.hierarchicalrequirementJSON,});
     });
                              });
                         });
