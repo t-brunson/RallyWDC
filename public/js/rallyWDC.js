@@ -4,8 +4,8 @@
     var config = {
       state: '1234-5678-90',
       response_type:'code',
-      redirectUri: 'https://rallywdc.herokuapp.com/redirect', //This is the same as callback url that you set in oauth settings in rally during setup
-      client_id: '9a3dde04b8a74d828cf37617ded9e2f1',
+      redirectUri: 'http://localhost:3000/redirect', //This is the same as callback url that you set in oauth settings in rally during setup
+      client_id: 'f644fa154f85470f84f9edaf0c8bc59b',
       authUrl: 'https://rally1.rallydev.com/',
       scope: 'alm'
   };
