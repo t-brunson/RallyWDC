@@ -2,9 +2,9 @@
 // Contains credentials for your Rally application
 // And the new redirect path for the OAuth flow
 module.exports = {
- 'HOSTPATH': 'http://localhost',
- 'PORT': 3000,
- 'CLIENT_ID': 'f644fa154f85470f84f9edaf0c8bc59b',
- 'CLIENT_SECRET': 'CKzeUErtTbmoR8wzBCCkr1E8y9mpPU10oz8d8wuqx9M',
+ 'HOSTPATH': 'https://rallywdc.herokuapp.com',
+ 'PORT': process.env.PORT,
+ 'CLIENT_ID': '9a3dde04b8a74d828cf37617ded9e2f1',
+ 'CLIENT_SECRET': 'QHOn6M6qSXyi3BJ46kDcZkWIQyXHk7ntWBk6BB7TM0',
  'REDIRECT_PATH': '/redirect'
 };
