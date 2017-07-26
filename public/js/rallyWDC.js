@@ -207,7 +207,7 @@
             request.setRequestHeader("zsessionid", accessToken);
                     },
             //Url that for that request
-          url: "https://rally1.rallydev.com/slm/webservice/v2.0/hierarchicalrequirement?project/"+projectID+"&query=(((Iteration.Name = "+ '"OC-P5.R3-Sprint 13"' + ") OR (Iteration.Name = "+ '"OC-P5.R3-Sprint 12"' + ")) OR (Iteration.Name = "+ '"OC-P5.R3-Sprint 11"' + "))&fetch=FormattedID,PlanEstimate,Rank,ScheduleState,Tags,Type,WorkState,AcceptedDate,IsTestable,Capability,RundDate,ObjectID,DirectChildrenCount,Name,Iteration,Parent,Owner,Release,c_type,Feature,c_AcceptanceCriteria,Description,Ready,c_OriginalRank,Discussion,Blocked,TaskEstimateTotal,TaskRemainingTotal,pagesize=200",
+          url: "https://rally1.rallydev.com/slm/webservice/v2.0/hierarchicalrequirement?project/"+projectID+"&query=(((Iteration.Name = "+ '"OC-P5.R3-Sprint 13"' + ") OR (Iteration.Name = "+ '"OC-P5.R3-Sprint 12"' + ")) OR (Iteration.Name = "+ '"OC-P5.R3-Sprint 11"' + "))&fetch=FormattedID,PlanEstimate,Rank,ScheduleState,Tags,Type,WorkState,AcceptedDate,IsTestable,Capability,RundDate,ObjectID,DirectChildrenCount,Name,Iteration,Parent,Owner,Release,c_type,Feature,c_AcceptanceCriteria,Description,Ready,c_OriginalRank,Discussion,Blocked,TaskEstimateTotal,TaskRemainingTotal&pagesize=200",
           dataType: 'json',
           success: function (data) {
                 //Where all the JSON data is stored

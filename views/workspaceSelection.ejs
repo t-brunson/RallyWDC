@@ -20,19 +20,19 @@ table {
 
 </head>
 <body>
-        <h2>Select Workspace </h2>
+
        <br> <table class="form container-table">
             <tr class="row">
                 <td>
              <!-- Work Space Selector -->
-                <label class="col-md-4 control-label" for="filter-key">Select WorkSpace:  </label> <p>Select a specif project to get data for. </p>
+                <label class="col-md-4 control-label" for="filter-key">Select WorkSpace:  </label> <p>Select a specif workspace to get data from. </p>
                     <form action ='/getProjects' method ='post'>   
                     <select class="col-md-4 form-control" name="workspace" >
                         <% Workspace.QueryResult.Results.forEach(function(item){%>
                                 <option value = "<%= item._refObjectName %>">  <%= item._refObjectName %> </option> 
                         <% })%>
                      </select>
-                    <button type="submit" id="workspaceButton" class="btn btn-success" style="margin: 10px;">Get Project Data </button>
+                    <button type="submit" id="workspaceButton" class="btn btn-success" style="margin: 10px;">Get Workspace </button>
                     </form>
                 </td>  
                 
