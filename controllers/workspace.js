@@ -1,49 +1,24 @@
 //Handling Post Request info
 var bodyParser= require('body-parser');
 var urlencodedParser = bodyParser.urlencoded({extended: false});
-//Loging into rally
-var rally = require('rally');
-var queryUtils = rally.util.query;
 //Creating the methods object to export to routes
 var methods = {};
 //Defining a session 
 var ssn;
-//Log the user in
-methods.login =function(req, userName, password){
-    ssn=req.session;
-    restApi = rally({
-    user: userName, 
-    pass: password,
-    apiVersion: 'v2.0', //this is the default and may be omitted
-    server: 'https://rally1.rallydev.com/',  
-    requestOptions: {
-        headers: {
-            'X-RallyIntegrationName': 'Rally WDC',  
-            'X-RallyIntegrationVendor': 'Trey Brunson',             
-            'X-RallyIntegrationVersion': '1.0'                
-        }
-         
-    }
-        
-});
-    //Print Test
-    console.log("Login Succesful");
-    return restApi;
-    
-};
+var projectsJSON;
+var request = require('request');
 //Get the selected workspace ID
 methods.getWorkspaceID = function(req,workspaceJSON){
         console.log("Getting User workspace");
         ssn = req.session;
-    //Where the project results go
-        var projectsJSON;
-    //Get the workspace the user requested from the drop down
+      //Get the workspace the user requested from the drop down 
         var workspaceResponse = req.body.workspace;
         console.log(workspaceResponse);
         //Creating an Array to Loop Through
         var workspace=[workspaceJSON];
         //Looping through Array to check value and find workspaceID
-            workspace[0].Results.forEach(function(item){
+            workspace[0].QueryResult.Results.forEach(function(item){
+                //If the item in the workspace array matches the one the user requested the workspace ID is saved and shared with all routes
                 if(item._refObjectName === workspaceResponse){
                    //Workspace ID 
                     console.log(item._ref.substring(item._ref.lastIndexOf("/")+1, item._ref.length));
@@ -53,28 +28,30 @@ methods.getWorkspaceID = function(req,workspaceJSON){
             })
         };
 //Get projects based on selected workspace
-methods.getProjects = function(req,res,rally,workspaceID){
+methods.getProjects = function(req,res,workspaceID){
         ssn = req.session;    
         console.log("Project Query Started");
-    //Project Query
-            rally.query({
-                type: 'Project', 
-                //query: queryUtils.where('Children', '!=', ''),
-                scope: {
-                    workspace: '/workspace/'+ workspaceID,
-                    up:'true',
-                    down:'false'
-                }},function(error, result){
-        //Test for error
-        if(error) {
-            console.log("there was an error");}
-        
-        //Save workspace JSON data
-        projectsJSON= result;
-        //Set project object for other middleware
-        ssn.projectsJSON= projectsJSON;
+    //Project Query to get all the projects for the selected workspace
+     var token_request_header = {
+      "zsessionid": ssn.accessToken,
+  };
+  // Build the get request 
+     var options = {
+      method: 'GET',
+      url: "https://rally1.rallydev.com/slm/webservice/v2.0/Project?workspace/"+workspaceID+"&pagesize=200",
+      headers: token_request_header
+  };
+  // Make the post request
+  request(options, function (error, response, body) {
+    if (!error) {
+        projectsJSON= JSON.parse(body);
+        ssn.projectsJSON=projectsJSON;
         console.log('Project Query Completed');
         res.render("projectSelection", {Project: projectsJSON});
-            });
-    };
+    } else {
+    console.log('Post request failed')
+    console.log(error);
+    }
+  });   
+};
 exports.data =methods;

@@ -1,85 +1,132 @@
-//Installing libraries//
+//Rally Web Data Connector
+//Trey Brunson
 
-//Web Development Framwork for node 
+//--------------Required Libraries---------------//
+//Web development framwork  
 var express = require('express');
+//Setting paths to find files
 var path = require('path');
-//Logging requests/error handling
-var logger = require('morgan');
 //Handling post requests
 var bodyParser = require('body-parser');
-//Connecting to rally database
-var rally = require('rally');
-//Creating sessions to pass variables across routes
+//Creating sessions to share variables across application
 var session = require('express-session');
+//Easy HTTP requests
+var request = require('request');
+//--------------Required Libraries---------------//
 
-//Creating paths for routing
-var index = require('./routes/index');
-var login = require('./routes/login');
-var workspace = require('./routes/workspace');
+///-------------Router Paths--------------///
+var getWorkspaces = require('./routes/getWorkspaces');
+var getProjects = require('./routes/getProjects');
 var project = require('./routes/project');
-var sendData = require('./routes/sendData');
+///--------------Router Paths---------------///
 
-//Creat an instance
+//Create an instance
 var app = express();
-//Manage CORS Requests
+
+//--------------Setting Paths for Files---------------//
+// Set path to look for views
+app.set('views', path.join(__dirname, 'views'));
+//Use ejs to create dynamic web pages
+app.set('view engine', 'ejs');
+//Set path for static files
+app.use(express.static(path.join(__dirname, 'public')));
+//--------------Setting Paths for Files---------------//
+
+//--------------Defining requirments for current app instance---------------//
+//Create a session for this instance
+app.use(session({
+  cookieName: 'session',
+  secret: 'Keep this hidden',
+  duration: 30 * 60 * 1000,
+  activeDuration: 5 * 60 * 1000,
+}));
+
+//Manage cross site requests
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
-
-// Setting path for views
-app.set('views', path.join(__dirname, 'views'));
-//Allowing dynamic html pages
-app.set('view engine', 'ejs');
-
-//Create a session for this instance
-app.use(session({
-  cookieName: 'session',
-  secret: 'secret',
-  duration: 30 * 60 * 1000,
-  activeDuration: 5 * 60 * 1000,
-}));
-
-//Logging for errors
-app.use(logger('dev'));
-
-//Handingling data from POST request
+//Handel data from POST request
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+//--------------Defining Requirments for current app instance---------------//
 
-//Set satic file path
-app.use(express.static(path.join(__dirname, 'public')));
+//--------------OAUTH---------------//
+//Get configuration info for oAuth
+var config =require('./config.js');
+//Defining Variables for OAuth
+var clientID = config.CLIENT_ID;
+var clientSecret = config.CLIENT_SECRET;
+console.log(clientID);
+console.log(clientSecret);
+var redirectURI = config.HOSTPATH + ":" + config.PORT + config.REDIRECT_PATH;
 
-//Displays the login page when site is requested
-app.use('/', index);
+//Handel redirect request from rally oAuth request
+app.get('/redirect', function(req, res) { //This is the same as your call back url from oauth setup localhost:3000 /redirect         ############
+    console.log("Redirect request called");
+    //Define a session
+    var ssn;
+    ssn = req.session;
+  //Get authorization code from rally
+  authCode = req.query.code;
+    //Print authoCode to console 
+  console.log(authCode);
+  //Request for access token now that we have a code
+  var requestObject = {
+      code: authCode,
+      redirect_uri: redirectURI,
+      grant_type: 'authorization_code',
+      client_id: clientID,
+      client_secret: clientSecret,
+  };
+  var token_request_header = {
+      'Content-Type': 'application/x-www-form-urlencoded',
+  };
+  // Build the post request for the OAuth endpoint
+  var options = {
+      method: 'POST',
+      url: 'https://rally1.rallydev.com/login/oauth2/token',
+      jar: false,
+      form: requestObject,
+      headers: token_request_header,
+  };
+  //Make the post request
+  request(options, function (error, response, body) {
+    if (!error) {
+      //We should receive  { access_token: ACCESS_TOKEN }
+      //Parse the token from the response
+      body = JSON.parse(body);
+      var accessToken = body.access_token;
+        //Allow the access token to be used accross routes
+      ssn.accessToken =accessToken;
+      console.log(accessToken);
+      //Set the token in cookies so the client can access it
+      res.cookie('accessToken', accessToken, { });
+      //Send request to login route
+      res.redirect('/getWorkspaces');
+    } else {
+      console.log('Post request failed');
+      console.log(error);
+    }
+  });
+});
+//--------------OAUTH---------------//
+
+//--------------Defining where to send requests ---------------//
+//Displays the login page when html://localhost:3000 is requested
+app.get('/', function(req, res) {
+  console.log("Display WDC");
+    //Send client to index page
+  res.redirect('/index.html');
+});
 //Logging the user in
-app.use('/login', login);
+app.use('/getWorkspaces', getWorkspaces);
 //Finding the users workspaces
-app.use('/workspace', workspace);
+app.use('/getProjects', getProjects);
 //Finding the projects aviable for specific workspace
 app.use('/project', project);
-//Sending data for the web data connector
-app.use('/sendData',sendData);
-//Sending data for the web data connector
-app.use('/sendData/submit',sendData);
-
-//Error Handling//
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
-});
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
-});
+//--------------Defining where to send requests ---------------//
 
 //Export the instance
 module.exports = app;

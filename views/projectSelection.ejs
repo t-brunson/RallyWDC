@@ -28,7 +28,7 @@ table {
                 <label class="col-md-4 control-label" for="filter-key">Select Project:</label><p>Select a specific project to get data from</p>
                      <form action ='/project' method ='post'>
                     <select class="col-md-4 form-control" name="project">
-                        <% Project.Results.forEach(function(item){%>
+                        <% Project.QueryResult.Results.forEach(function(item){%>
                                 <option value = "<%= item._refObjectName %>">  <%= item._refObjectName %> </option> 
                         <% })%>
                      </select>

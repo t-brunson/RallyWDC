@@ -26,9 +26,9 @@ table {
                 <td>
              <!-- Work Space Selector -->
                 <label class="col-md-4 control-label" for="filter-key">Select WorkSpace:  </label> <p>Select a specif project to get data for. </p>
-                    <form action ='/workspace' method ='post'>   
+                    <form action ='/getProjects' method ='post'>   
                     <select class="col-md-4 form-control" name="workspace" >
-                        <% Workspace.Results.forEach(function(item){%>
+                        <% Workspace.QueryResult.Results.forEach(function(item){%>
                                 <option value = "<%= item._refObjectName %>">  <%= item._refObjectName %> </option> 
                         <% })%>
                      </select>

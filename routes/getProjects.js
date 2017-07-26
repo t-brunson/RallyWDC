@@ -17,9 +17,7 @@ router.post('/',function(req,res,next){
             },
 //Query for projects based on workspace
 function(req, res){
-    //Get login info
-    var rallyInfo= workspace.data.login(req,ssn.userName,ssn.userPassword);
     //Get projects based on workspace and then move to filter page
-    workspace.data.getProjects(req,res,rallyInfo,ssn.workspaceID);
+    workspace.data.getProjects(req,res,ssn.workspaceID);
           });
 module.exports = router;

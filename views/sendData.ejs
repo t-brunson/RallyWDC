@@ -31,7 +31,7 @@ table {
                 <h3 class="col-md-4 control-label" for="filter-key">Workspace:</h3>
                      
                     <select class="col-md-4 form-control" name="project">
-                        <% Workspace.Results.forEach(function(item){%>
+                        <% Workspace.QueryResult.Results.forEach(function(item){%>
                             <%if(item._ref.substring(item._ref.lastIndexOf("/")+1, item._ref.length) === WorkspaceID){ %>
                                 <option value = "<%= item._refObjectName %>">  <%= item._refObjectName %> </option> 
                         <% }});%>
@@ -39,7 +39,7 @@ table {
                     <h3 class="col-md-4 control-label" for="filter-key">Project:</h3>
                          
                     <select class="col-md-4 form-control" name="project">
-                        <% Project.Results.forEach(function(item){%>
+                        <% Project.QueryResult.Results.forEach(function(item){%>
                             <%if(item._ref.substring(item._ref.lastIndexOf("/")+1, item._ref.length) === ProjectID){ %>
                                 <option value = "<%= item._refObjectName %>">  <%= item._refObjectName %> </option> 
                         <% }});%>
